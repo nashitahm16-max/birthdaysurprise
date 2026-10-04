@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>A Little Birthday Surprise 🤍</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Georgia, "Times New Roman", serif;
+      background:
+        radial-gradient(circle at top, #fff8fb 0%, #f9dce8 45%, #f3bfd3 100%);
+      color: #6d4052;
+      overflow: hidden;
+      text-align: center;
+    }
+
+    .pearls {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .pearl {
+      position: absolute;
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.85);
+      box-shadow: 0 0 12px rgba(255,255,255,0.9);
+      animation: float 7s infinite ease-in-out;
+    }
+
+    .pearl:nth-child(1) { left: 10%; top: 20%; }
+    .pearl:nth-child(2) { left: 25%; top: 70%; animation-delay: 1s; }
+    .pearl:nth-child(3) { left: 50%; top: 15%; animation-delay: 2s; }
+    .pearl:nth-child(4) { left: 72%; top: 65%; animation-delay: 3s; }
+    .pearl:nth-child(5) { left: 88%; top: 25%; animation-delay: 4s; }
+    .pearl:nth-child(6) { left: 40%; top: 85%; animation-delay: 2.5s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); opacity: .4; }
+      50% { transform: translateY(-25px); opacity: 1; }
+    }
+
+    .card {
+      width: min(90%, 650px);
+      padding: 55px 35px;
+      border-radius: 30px;
+      background: rgba(255,255,255,0.65);
+      border: 1px solid rgba(255,255,255,0.9);
+      box-shadow: 0 20px 60px rgba(120,60,90,0.18);
+      backdrop-filter: blur(12px);
+      position: relative;
+      z-index: 2;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .lock {
+      font-size: 42px;
+      margin-bottom: 15px;
+    }
+
+    h1 {
+      font-size: clamp(30px, 6vw, 52px);
+      margin: 10px 0;
+      color: #8b4c67;
+      font-weight: normal;
+    }
+
+    h2 {
+      font-size: 26px;
+      color: #9b6078;
+      font-weight: normal;
+    }
+
+    p {
+      font-family: Arial, sans-serif;
+      font-size: 17px;
+      line-height: 1.8;
+      color: #70485a;
+    }
+
+    .countdown {
+      margin-top: 25px;
+      font-family: Arial, sans-serif;
+      font-size: 16px;
+      letter-spacing: 1px;
+      color: #9b6078;
+    }
+
+    .message {
+      animation: appear 2s ease;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .signature {
+      margin-top: 30px;
+      font-size: 22px;
+      font-style: italic;
+      color: #8b4c67;
+    }
+
+    .heart {
+      font-size: 24px;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="pearls">
+    <div class="pearl"></div>
+    <div class="pearl"></div>
+    <div class="pearl"></div>
+    <div class="pearl"></div>
+    <div class="pearl"></div>
+    <div class="pearl"></div>
+  </div>
+
+  <!-- LOCKED SCREEN -->
+  <div class="card" id="locked">
+    <div class="lock">🔐</div>
+
+    <h1>A little surprise...</h1>
+
+    <p>
+      Something special is waiting for you. 🤍
+    </p>
+
+    <div class="countdown" id="countdown">
+      Loading...
+    </div>
+  </div>
+
+
+  <!-- BIRTHDAY MESSAGE -->
+  <div class="card hidden" id="birthday">
+
+    <div class="message">
+
+      <div class="heart">🤍 ✨ 🤍</div>
+
+      <h1>To everyone who came...</h1>
+
+      <h2>Thank you for being part of my birthday. 🎀</h2>
+
+      <p>
+        Tonight wasn't just about celebrating another year of my life.
+        It was about the beautiful people who chose to be here,
+        share their time with me, laugh with me and create memories with me.
+      </p>
+
+      <p>
+        Every conversation, every laugh, every little moment
+        made tonight even more special.
+      </p>
+
+      <p>
+        Thank you for showing up, for celebrating with me,
+        and for making my birthday one I will always remember.
+      </p>
+
+      <p>
+        I'm genuinely grateful that you were here. 🥹🤍
+      </p>
+
+      <div class="signature">
+        With love,<br>
+        Nashitah ✨
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- CLOSED SCREEN -->
+  <div class="card hidden" id="closed">
+
+    <div class="lock">🔒</div>
+
+    <h1>The little surprise has closed.</h1>
+
+    <p>
+      Thank you for being part of my special day. 🤍
+    </p>
+
+    <div class="heart">🎀 ✨ 🎀</div>
+
+  </div>
+
+
+  <script>
+
+    /*
+      BIRTHDAY SETTINGS
+      October 16, 2026
+      7:00 PM Uganda time
+      Open for 5 minutes
+    */
+
+    const unlockDate = new Date("2026-10-16T19:00:00+03:00");
+
+    const closeDate = new Date(
+      unlockDate.getTime() + (5 * 60 * 1000)
+    );
+
+
+    function updatePage() {
+
+      const now = new Date();
+
+      const locked = document.getElementById("locked");
+      const birthday = document.getElementById("birthday");
+      const closed = document.getElementById("closed");
+      const countdown = document.getElementById("countdown");
+
+
+      if (now < unlockDate) {
+
+        locked.classList.remove("hidden");
+        birthday.classList.add("hidden");
+        closed.classList.add("hidden");
+
+        const difference = unlockDate - now;
+
+        const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+        const hours = Math.floor(
+          (difference / (1000 * 60 * 60)) % 24
+        );
+        const minutes = Math.floor(
+          (difference / (1000 * 60)) % 60
+        );
+        const seconds = Math.floor(
+          (difference / 1000) % 60
+        );
+
+        countdown.innerHTML =
+          `Opens in ${days}d ${hours}h ${minutes}m ${seconds}s ✨`;
+
+      }
+
+      else if (now >= unlockDate && now < closeDate) {
+
+        locked.classList.add("hidden");
+        birthday.classList.remove("hidden");
+        closed.classList.add("hidden");
+
+      }
+
+      else {
+
+        locked.classList.add("hidden");
+        birthday.classList.add("hidden");
+        closed.classList.remove("hidden");
+
+      }
+
+    }
+
+    updatePage();
+
+    setInterval(updatePage, 1000);
+
+  </script>
+
+</body>
+</html>
